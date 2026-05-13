@@ -1,0 +1,264 @@
+<app-header></app-header>
+
+<main class="product-page">
+  <!-- Breadcrumb -->
+  <div class="page-breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb-list">
+        <li><a routerLink="/">Accueil</a></li>
+        <li><a routerLink="/shop">Boutique</a></li>
+        <li><a routerLink="/shop">{{ product.category }}</a></li>
+        <li><span>{{ product.name }}</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container product-detail">
+    <div class="product-grid">
+      <!-- Galerie -->
+      <div class="product-gallery">
+        <div class="main-image">
+          <img [src]="mainImage()" [alt]="product.name" />
+          @if (product.discount > 0) {
+            <span class="discount-badge">-{{ product.discount }}%</span>
+          }
+        </div>
+        <div class="thumbnails">
+          @for (img of images; track img) {
+            <button class="thumb"
+                    [class.active]="mainImage() === img"
+                    (click)="setMainImage(img)">
+              <img [src]="img" [alt]="product.name" />
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Infos -->
+      <div class="product-info">
+        <small class="product-brand">{{ product.brand }}</small>
+        <h1 class="product-title">{{ product.name }}</h1>
+
+        <div class="product-meta">
+          <div class="rating">
+            @for (s of getStarsArray(product.rating); track $index) {
+              <span class="star" [class.full]="s === 'full'" [class.half]="s === 'half'">★</span>
+            }
+            <span class="rating-text">{{ product.rating }} ({{ product.reviewCount }} avis)</span>
+          </div>
+          <span class="sku">Ref. {{ product.sku }}</span>
+        </div>
+
+        <div class="product-prices">
+          <span class="price-current">{{ product.price | fcfa }}</span>
+          @if (product.oldPrice) {
+            <span class="price-old">{{ product.oldPrice | fcfa }}</span>
+            <span class="price-saving">Vous economisez {{ (product.oldPrice - product.price) | fcfa }}</span>
+          }
+        </div>
+
+        <p class="product-description">{{ product.description }}</p>
+
+        <div class="product-options">
+          <!-- Couleur -->
+          <div class="option-block">
+            <label>Couleur : <strong>{{ selectedColor() ? colors[0].name : 'Choisissez' }}</strong></label>
+            <div class="color-options">
+              @for (c of colors; track c.hex) {
+                <button class="color-option"
+                        [class.active]="selectedColor() === c.hex"
+                        [style.background]="c.hex"
+                        [title]="c.name"
+                        (click)="setColor(c.hex)"></button>
+              }
+            </div>
+          </div>
+
+          <!-- Taille -->
+          <div class="option-block">
+            <label>Taille : <strong>{{ selectedSize() || 'Choisissez' }}</strong></label>
+            <div class="size-options">
+              @for (s of sizes; track s) {
+                <button class="size-option"
+                        [class.active]="selectedSize() === s"
+                        (click)="setSize(s)">{{ s }}</button>
+              }
+            </div>
+            <a routerLink="/faq" class="size-guide">Guide des tailles →</a>
+          </div>
+
+          <!-- Quantite + Stock -->
+          <div class="option-block">
+            <label>Quantite</label>
+            <div class="qty-stock">
+              <div class="quantity-selector">
+                <button (click)="decrement()" [disabled]="quantity() <= 1">−</button>
+                <span>{{ quantity() }}</span>
+                <button (click)="increment()" [disabled]="quantity() >= product.stockCount">+</button>
+              </div>
+              @if (product.inStock) {
+                <span class="stock-info in-stock">
+                  ✓ En stock ({{ product.stockCount }} disponibles)
+                </span>
+              } @else {
+                <span class="stock-info out-of-stock">✗ Rupture de stock</span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="product-actions">
+          <button class="btn btn-primary btn-lg" (click)="addToCart()" [disabled]="!product.inStock">
+            <i class="an an-shopping-bag"></i> Ajouter au panier
+          </button>
+          <button class="btn btn-buy-now btn-lg" (click)="buyNow()" [disabled]="!product.inStock">
+            Acheter maintenant
+          </button>
+          <button class="btn-icon-only"
+                  [class.active]="isInWishlist()"
+                  (click)="toggleWishlist()"
+                  aria-label="Favoris">
+            <i class="an an-heart"></i>
+          </button>
+        </div>
+
+        <!-- Garanties -->
+        <div class="product-guarantees">
+          <div class="guarantee">
+            <i class="an an-truck"></i>
+            <div>
+              <strong>Livraison rapide</strong>
+              <small>24-48h Douala/Yaounde, 5j toutes regions</small>
+            </div>
+          </div>
+          <div class="guarantee">
+            <i class="an an-redo"></i>
+            <div>
+              <strong>Retour facile</strong>
+              <small>7 jours pour changer d'avis</small>
+            </div>
+          </div>
+          <div class="guarantee">
+            <i class="an an-shield"></i>
+            <div>
+              <strong>Paiement securise</strong>
+              <small>MTN MoMo, Orange Money, COD</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Partage -->
+        <div class="product-share">
+          <span>Partager :</span>
+          <a href="#" aria-label="Facebook"><i class="an an-facebook"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="an an-whatsapp"></i></a>
+          <a href="#" aria-label="Twitter"><i class="an an-twitter"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Onglets -->
+    <div class="product-tabs">
+      <div class="tabs-nav">
+        <button class="tab-link"
+                [class.active]="activeTab() === 'description'"
+                (click)="setTab('description')">Description</button>
+        <button class="tab-link"
+                [class.active]="activeTab() === 'specs'"
+                (click)="setTab('specs')">Caracteristiques</button>
+        <button class="tab-link"
+                [class.active]="activeTab() === 'reviews'"
+                (click)="setTab('reviews')">Avis ({{ product.reviewCount }})</button>
+      </div>
+
+      <div class="tabs-content">
+        @if (activeTab() === 'description') {
+          <div class="tab-panel">
+            <div class="long-description">{{ product.longDescription }}</div>
+          </div>
+        }
+        @if (activeTab() === 'specs') {
+          <div class="tab-panel">
+            <table class="specs-table">
+              @for (s of product.specs; track s.label) {
+                <tr>
+                  <th>{{ s.label }}</th>
+                  <td>{{ s.value }}</td>
+                </tr>
+              }
+            </table>
+          </div>
+        }
+        @if (activeTab() === 'reviews') {
+          <div class="tab-panel reviews-panel">
+            <div class="reviews-summary">
+              <div class="rating-big">
+                <strong>{{ product.rating }}</strong>
+                <div class="stars">
+                  @for (s of getStarsArray(product.rating); track $index) {
+                    <span class="star" [class.full]="s === 'full'" [class.half]="s === 'half'">★</span>
+                  }
+                </div>
+                <small>{{ product.reviewCount }} avis</small>
+              </div>
+              <div class="rating-bars">
+                @for (r of ratingDistribution(); track r.stars) {
+                  <div class="rating-bar">
+                    <span class="bar-label">{{ r.stars }} ★</span>
+                    <div class="bar-track">
+                      <div class="bar-fill" [style.width.%]="r.percent"></div>
+                    </div>
+                    <span class="bar-count">{{ r.count }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="reviews-list">
+              @for (r of reviews; track r.id) {
+                <article class="review-card">
+                  <div class="review-header">
+                    <strong>{{ r.user }}</strong>
+                    <small>{{ r.city }} · {{ r.date }}</small>
+                  </div>
+                  <div class="review-rating">
+                    @for (s of getStarsArray(r.rating); track $index) {
+                      <span class="star" [class.full]="s === 'full'">★</span>
+                    }
+                  </div>
+                  <p>{{ r.text }}</p>
+                </article>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Produits lies -->
+    <section class="related-products">
+      <h2 class="section-title">PRODUITS SIMILAIRES</h2>
+      <div class="related-grid">
+        @for (p of relatedProducts; track p.id) {
+          <a class="related-card" [routerLink]="['/product', p.id]">
+            <div class="related-image-wrap">
+              <img [src]="p.image" [alt]="p.name" class="related-image main">
+              @if (p.hoverImage) {
+                <img [src]="p.hoverImage" [alt]="p.name" class="related-image hover">
+              }
+            </div>
+            <div class="related-info">
+              <h4>{{ p.name }}</h4>
+              <div class="related-prices">
+                @if (p.oldPrice) { <span class="price-old">{{ p.oldPrice | fcfa }}</span> }
+                <span class="price-current">{{ p.price | fcfa }}</span>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+  </div>
+</main>
+
+<app-footer></app-footer>

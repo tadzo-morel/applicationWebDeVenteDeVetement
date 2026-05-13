@@ -1,0 +1,201 @@
+<app-header></app-header>
+
+<main class="account-page">
+  <div class="page-breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb-list">
+        <li><a routerLink="/">Accueil</a></li>
+        <li><span>Mon compte</span></li>
+      </ul>
+      <h1 class="page-title">Mon compte</h1>
+    </div>
+  </div>
+
+  <div class="container account-layout">
+    <!-- Sidebar navigation -->
+    <aside class="account-sidebar">
+      <div class="user-card">
+        <div class="user-avatar">
+          <span>{{ auth.currentUser()?.firstName?.[0] || '?' }}</span>
+        </div>
+        <div>
+          <strong>{{ auth.currentUser()?.firstName }} {{ auth.currentUser()?.lastName }}</strong>
+          <small>{{ auth.currentUser()?.phone }}</small>
+        </div>
+      </div>
+
+      <nav class="account-nav">
+        <button class="nav-item" [class.active]="activeTab() === 'profile'" (click)="setTab('profile')">
+          <i class="an an-user"></i> Profil
+        </button>
+        <button class="nav-item" [class.active]="activeTab() === 'orders'" (click)="setTab('orders')">
+          <i class="an an-shopping-bag"></i> Mes commandes <span class="badge">{{ orders.length }}</span>
+        </button>
+        <button class="nav-item" [class.active]="activeTab() === 'addresses'" (click)="setTab('addresses')">
+          <i class="an an-map-marker"></i> Mes adresses
+        </button>
+        <button class="nav-item" [class.active]="activeTab() === 'security'" (click)="setTab('security')">
+          <i class="an an-shield"></i> Securite
+        </button>
+        <button class="nav-item logout" (click)="logout()">
+          <i class="an an-logout"></i> Deconnexion
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <section class="account-content">
+      @if (saveSuccess()) {
+        <div class="alert alert-success">{{ saveSuccess() }}</div>
+      }
+
+      <!-- Profile -->
+      @if (activeTab() === 'profile') {
+        <div class="content-block">
+          <h2>Informations personnelles</h2>
+          <p class="muted">Modifiez vos informations de contact</p>
+
+          <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Prenom</label>
+                <input type="text" class="form-control" formControlName="firstName">
+              </div>
+              <div class="form-group">
+                <label>Nom</label>
+                <input type="text" class="form-control" formControlName="lastName">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" formControlName="email">
+              </div>
+              <div class="form-group">
+                <label>Telephone</label>
+                <input type="tel" class="form-control" formControlName="phone" placeholder="+237670123456">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">
+              Enregistrer
+            </button>
+          </form>
+        </div>
+      }
+
+      <!-- Orders -->
+      @if (activeTab() === 'orders') {
+        <div class="content-block">
+          <h2>Mes commandes</h2>
+          <p class="muted">Historique de vos achats sur blogSite Cameroun</p>
+
+          @if (orders.length === 0) {
+            <div class="empty-state">
+              <i class="an an-shopping-bag"></i>
+              <p>Vous n'avez encore passe aucune commande</p>
+              <a routerLink="/shop" class="btn btn-primary">Decouvrir la boutique</a>
+            </div>
+          } @else {
+            <div class="orders-list">
+              @for (o of orders; track o.id) {
+                <div class="order-card">
+                  <div class="order-header">
+                    <div>
+                      <strong>{{ o.id }}</strong>
+                      <small>{{ o.date }}</small>
+                    </div>
+                    <span class="order-status" [class]="'status-' + o.status">
+                      {{ getStatusLabel(o.status) }}
+                    </span>
+                  </div>
+                  <div class="order-body">
+                    <div class="order-info">
+                      <span>{{ o.items }} article(s)</span>
+                      <span>Paiement : <strong>{{ getPaymentLabel(o.payment) }}</strong></span>
+                    </div>
+                    <div class="order-total">
+                      <small>Total</small>
+                      <strong>{{ o.total | fcfa }}</strong>
+                    </div>
+                  </div>
+                  <div class="order-actions">
+                    <button class="btn btn-outline">Voir le detail</button>
+                    @if (o.status === 'delivered') {
+                      <button class="btn btn-outline">Recommander</button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Addresses -->
+      @if (activeTab() === 'addresses') {
+        <div class="content-block">
+          <h2>Mes adresses de livraison</h2>
+          <p class="muted">Gerez vos adresses pour des commandes plus rapides</p>
+
+          <div class="addresses-grid">
+            @for (a of addresses; track a.id) {
+              <div class="address-card">
+                @if (a.isDefault) { <span class="default-badge">Par defaut</span> }
+                <strong>{{ a.label }}</strong>
+                <p>{{ a.address }}<br>{{ a.city }}, {{ a.region }}<br>Cameroun</p>
+                <div class="address-actions">
+                  <button class="btn-text">Modifier</button>
+                  <button class="btn-text danger">Supprimer</button>
+                </div>
+              </div>
+            }
+            <button class="address-card add-card">
+              <i class="an an-plus"></i>
+              <span>Ajouter une adresse</span>
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Security -->
+      @if (activeTab() === 'security') {
+        <div class="content-block">
+          <h2>Securite du compte</h2>
+          <p class="muted">Modifier votre mot de passe</p>
+
+          <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+            <div class="form-group">
+              <label>Mot de passe actuel</label>
+              <input type="password" class="form-control" formControlName="currentPassword">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nouveau mot de passe</label>
+                <input type="password" class="form-control" formControlName="newPassword">
+                <small>Minimum 8 caracteres</small>
+              </div>
+              <div class="form-group">
+                <label>Confirmer le nouveau mot de passe</label>
+                <input type="password" class="form-control" formControlName="confirmPassword">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid">
+              Changer le mot de passe
+            </button>
+          </form>
+
+          <hr style="margin: 32px 0; border: 0; border-top: 1px solid #eee;">
+
+          <h3>Donnees personnelles</h3>
+          <p class="muted">Conformement a la loi camerounaise n° 2024/017 sur la protection des donnees personnelles, vous pouvez :</p>
+          <div class="data-actions">
+            <button class="btn btn-outline">Telecharger mes donnees</button>
+            <button class="btn btn-outline danger">Supprimer mon compte</button>
+          </div>
+        </div>
+      }
+    </section>
+  </div>
+</main>
+
+<app-footer></app-footer>

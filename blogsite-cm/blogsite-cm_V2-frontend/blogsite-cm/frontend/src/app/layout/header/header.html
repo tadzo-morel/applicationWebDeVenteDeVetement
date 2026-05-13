@@ -1,0 +1,160 @@
+<!-- Bandeau promo top -->
+<div class="top-banner">
+  <div class="container">
+    <span>LIVRAISON GRATUITE DES 50 000 FCFA · MTN MoMo & Orange Money acceptes</span>
+  </div>
+</div>
+
+<!-- Header principal -->
+<header class="site-header">
+  <div class="container header-inner">
+    <!-- Logo -->
+    <a routerLink="/" class="logo">
+      <img src="assets/images/logo.svg" alt="blogSite Cameroun" width="160" height="44">
+    </a>
+
+    <!-- Menu desktop avec dropdowns -->
+    <nav class="main-nav" [class.open]="mobileMenuOpen()">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Accueil</a>
+
+      <!-- Dropdown Boutique -->
+      <div class="has-dropdown"
+           (mouseenter)="showDropdown('shop')"
+           (mouseleave)="hideDropdown()">
+        <a routerLink="/shop" routerLinkActive="active"
+           (click)="toggleDropdown('shop'); $event.preventDefault()">
+          Boutique <i class="caret">▾</i>
+        </a>
+        <div class="dropdown-menu mega" [class.open]="openDropdown() === 'shop'">
+          <div class="mega-grid">
+            <div class="mega-col">
+              <h5>Femme</h5>
+              <a routerLink="/shop" [queryParams]="{cat: 'robes'}">Robes</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'tops'}">Tops & T-shirts</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'pantalons'}">Pantalons</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'jupes'}">Jupes</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'vestes'}">Vestes</a>
+            </div>
+            <div class="mega-col">
+              <h5>Homme</h5>
+              <a routerLink="/shop" [queryParams]="{cat: 'chemises'}">Chemises</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'tshirts-h'}">T-shirts</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'pantalons-h'}">Pantalons</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'costumes'}">Costumes</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'vestes-h'}">Vestes</a>
+            </div>
+            <div class="mega-col">
+              <h5>Accessoires</h5>
+              <a routerLink="/shop" [queryParams]="{cat: 'sacs'}">Sacs</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'chaussures'}">Chaussures</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'bijoux'}">Bijoux</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'montres'}">Montres</a>
+              <a routerLink="/shop" [queryParams]="{cat: 'lunettes'}">Lunettes</a>
+            </div>
+            <div class="mega-col mega-feature">
+              <a routerLink="/shop" [queryParams]="{cat: 'promo'}">
+                <img src="assets/images/product-images/product-image1.jpg" alt="Promotions">
+                <span class="mega-feature-label">PROMOTIONS</span>
+                <span class="mega-feature-cta">Jusqu'a -50% →</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lookbook -->
+      <a routerLink="/lookbook" routerLinkActive="active">Lookbook</a>
+
+      <!-- Dropdown Pages -->
+      <div class="has-dropdown"
+           (mouseenter)="showDropdown('pages')"
+           (mouseleave)="hideDropdown()">
+        <a (click)="toggleDropdown('pages'); $event.preventDefault()" href="#">
+          Pages <i class="caret">▾</i>
+        </a>
+        <div class="dropdown-menu" [class.open]="openDropdown() === 'pages'">
+          <a routerLink="/about">A propos</a>
+          <a routerLink="/contact">Contact</a>
+          <a routerLink="/faq">FAQ</a>
+          <a routerLink="/cart">Panier</a>
+          <a routerLink="/checkout">Paiement</a>
+          <a routerLink="/my-account">Mon compte</a>
+          <a routerLink="/privacy-policy">Confidentialite</a>
+          <a routerLink="/terms-conditions">CGV</a>
+        </div>
+      </div>
+
+      <!-- Blog -->
+      <a routerLink="/blog" routerLinkActive="active">Blog</a>
+
+      <!-- Contact -->
+      <a routerLink="/contact" routerLinkActive="active">Contact</a>
+    </nav>
+
+    <!-- Actions droite -->
+    <div class="header-actions">
+      <app-language-switcher></app-language-switcher>
+
+      <button class="icon-btn" (click)="toggleSearch()" aria-label="Rechercher">
+        <i class="an an-search"></i>
+      </button>
+
+      <!-- Compte avec dropdown -->
+      <div class="has-dropdown account-dropdown"
+           (mouseenter)="showDropdown('account')"
+           (mouseleave)="hideDropdown()">
+        <button class="icon-btn" (click)="toggleDropdown('account')">
+          <i class="an an-user"></i>
+        </button>
+        <div class="dropdown-menu dropdown-right" [class.open]="openDropdown() === 'account'">
+          @if (auth.isAuthenticated()) {
+            <div class="dropdown-header">
+              <strong>{{ auth.currentUser()?.firstName }}</strong>
+              <small>{{ auth.currentUser()?.phone }}</small>
+            </div>
+            <a routerLink="/my-account">Mon compte</a>
+            <a routerLink="/cart">Mes commandes</a>
+            <button class="dropdown-link" (click)="logout()">Deconnexion</button>
+          } @else {
+            <a routerLink="/login">Connexion</a>
+            <a routerLink="/register">Inscription</a>
+          }
+        </div>
+      </div>
+
+      <a routerLink="/" class="icon-btn icon-with-count" title="Favoris">
+        <i class="an an-heart"></i>
+        @if (wishlistCount() > 0) {
+          <span class="count">{{ wishlistCount() }}</span>
+        }
+      </a>
+
+      <a routerLink="/cart" class="icon-btn icon-with-count" title="Panier">
+        <i class="an an-shopping-bag"></i>
+        @if (cartCount() > 0) {
+          <span class="count">{{ cartCount() }}</span>
+        }
+      </a>
+
+      <button class="burger" (click)="toggleMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  @if (searchOpen()) {
+    <div class="search-bar">
+      <div class="container">
+        <form (submit)="onSearch($event)">
+          <input type="text"
+                 [value]="searchQuery()"
+                 (input)="searchQuery.set($any($event.target).value)"
+                 placeholder="Rechercher un produit (ex: robe, chemise, sac...)"
+                 autofocus />
+          <button type="submit">Rechercher</button>
+          <button type="button" class="close" (click)="toggleSearch()" aria-label="Fermer">×</button>
+        </form>
+      </div>
+    </div>
+  }
+</header>

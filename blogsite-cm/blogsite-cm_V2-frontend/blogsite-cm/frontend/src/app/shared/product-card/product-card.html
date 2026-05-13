@@ -1,0 +1,83 @@
+<div class="product-card" [routerLink]="['/product', product.id]">
+  <!-- Badges -->
+  <div class="product-badge">
+    <span class="badge sale" *ngIf="product.badge === 'sale' || product.discount">-{{product.discount || '20%'}}</span>
+    <span class="badge new" *ngIf="product.badge === 'new'">Nouveau</span>
+    <span class="badge hot" *ngIf="product.badge === 'hot'">Tendance</span>
+  </div>
+
+  <!-- Image Container -->
+  <div class="card-image-container">
+    <img 
+      [src]="product.image" 
+      [alt]="product.name"
+      class="main-image"
+    >
+    <img 
+      *ngIf="product.hoverImage"
+      [src]="product.hoverImage" 
+      [alt]="product.name"
+      class="hover-image"
+    >
+    <div class="image-overlay"></div>
+    
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button class="action-btn" (click)="onQuickView($event)" title="Quick View">
+        <i class="an an-search"></i>
+      </button>
+      <button class="action-btn" (click)="onAddToWishlist($event)" [class.active]="isInWishlist" title="Add to Wishlist">
+        <i class="an an-heart"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Card Content -->
+  <div class="card-content">
+    <h3 class="product-title">{{product.name}}</h3>
+    
+    <!-- Rating -->
+    <div class="product-rating">
+      <div class="stars">
+        <span 
+          *ngFor="let star of getStars()" 
+          class="star" 
+          [class.filled]="getStarType(star) === 'filled'"
+          [class.half]="getStarType(star) === 'half'"
+        >
+          ★
+        </span>
+      </div>
+      <span class="rating-count" *ngIf="product.reviewCount">({{product.reviewCount}})</span>
+    </div>
+
+    <!-- Price -->
+    <div class="product-price">
+      <span class="current-price">{{ product.price | fcfa }}</span>
+      <span class="old-price" *ngIf="product.oldPrice">{{ product.oldPrice | fcfa }}</span>
+    </div>
+
+    <!-- Color Variants -->
+    <div class="color-variants" *ngIf="product.colors && product.colors.length > 0">
+      <span 
+        *ngFor="let color of product.colors" 
+        class="color-dot"
+        [style.backgroundColor]="color"
+        [class.selected]="selectedColor === color"
+        (click)="onColorSelect(color)"
+        [title]="color"
+      ></span>
+    </div>
+  </div>
+
+  <!-- Card Footer -->
+  <div class="card-footer">
+    <button class="add-to-cart-btn" (click)="onAddToCart($event)">
+      <i class="an an-shopping-bag"></i>
+      Ajouter au panier
+    </button>
+    <button class="wishlist-btn-card" (click)="onAddToWishlist($event)" [class.active]="isInWishlist">
+      <i class="an an-heart"></i>
+    </button>
+  </div>
+</div>

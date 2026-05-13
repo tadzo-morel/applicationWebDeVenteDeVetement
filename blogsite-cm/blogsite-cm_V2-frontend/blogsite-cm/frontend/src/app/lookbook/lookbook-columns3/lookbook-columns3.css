@@ -1,0 +1,207 @@
+.lookbook-page { background: #fff; }
+.lookbook-page .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+
+/* Hero */
+.lookbook-hero {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  color: #fff;
+  padding: 64px 0;
+  text-align: center;
+}
+
+.lookbook-hero .hero-tag {
+  display: inline-block;
+  background: #ee6c4d;
+  color: #fff;
+  padding: 4px 12px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.lookbook-hero h1 {
+  font-size: 36px;
+  margin: 0 0 12px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.lookbook-hero p {
+  color: #ccc;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.lookbook-content { padding: 48px 20px; }
+
+/* Filters */
+.filters-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #555;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  cursor: pointer;
+  border-radius: 50px;
+  transition: all .15s;
+}
+
+.filter-btn:hover {
+  border-color: #ee6c4d;
+  color: #ee6c4d;
+}
+
+.filter-btn.active {
+  background: #ee6c4d;
+  color: #fff;
+  border-color: #ee6c4d;
+}
+
+/* Grid */
+.looks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.look-card {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  transition: transform .3s, box-shadow .3s;
+}
+
+.look-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+
+.look-image {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.look-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s;
+}
+
+.look-card:hover .look-image img { transform: scale(1.05); }
+
+.look-category-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0,0,0,.7);
+  color: #fff;
+  padding: 4px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 2px;
+  z-index: 2;
+}
+
+.look-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,.7) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.look-card:hover .look-overlay { opacity: 1; }
+
+.btn-shop {
+  background: #fff;
+  color: #1a1a1a;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.btn-shop:hover { background: #ee6c4d; color: #fff; text-decoration: none; }
+
+.look-info { padding: 20px; }
+
+.look-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.look-location .icon, .look-location .an { color: #ee6c4d; }
+
+.look-info h3 {
+  font-size: 18px;
+  margin: 0 0 8px;
+  color: #1a1a1a;
+}
+
+.look-info p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+
+.look-products {
+  display: inline-block;
+  font-size: 12px;
+  color: #ee6c4d;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: #fff8f5;
+  border-radius: 12px;
+}
+
+/* CTA */
+.lookbook-cta {
+  text-align: center;
+  margin-top: 64px;
+  padding: 48px 24px;
+  background: linear-gradient(135deg, #ee6c4d 0%, #d75c40 100%);
+  color: #fff;
+  border-radius: 6px;
+}
+
+.lookbook-cta h2 { color: #fff; margin: 0 0 8px; font-size: 24px; }
+.lookbook-cta p { margin: 0 0 24px; opacity: .95; }
+
+.btn { padding: 12px 24px; border-radius: 4px; border: 0; font-weight: 700; text-decoration: none; display: inline-block; cursor: pointer; font-family: inherit; font-size: 14px; }
+.btn-primary { background: #1a1a1a; color: #fff; }
+.btn-primary:hover { background: #fff; color: #1a1a1a; text-decoration: none; }
+
+.no-results { text-align: center; padding: 64px 20px; }
+.no-results h3 { color: #1a1a1a; margin-bottom: 16px; }
+
+@media (max-width: 992px) { .looks-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .looks-grid { grid-template-columns: 1fr; } }

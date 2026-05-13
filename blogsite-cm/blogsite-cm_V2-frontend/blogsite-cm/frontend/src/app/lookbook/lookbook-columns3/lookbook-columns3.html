@@ -1,0 +1,61 @@
+<app-header></app-header>
+
+<main class="lookbook-page">
+  <!-- Hero -->
+  <section class="lookbook-hero">
+    <div class="container">
+      <span class="hero-tag">INSPIRATION MODE</span>
+      <h1>Lookbook blogSite Cameroun</h1>
+      <p>Decouvrez nos selections de tenues pour chaque occasion : business, soiree, plage, casual ou traditionnel.</p>
+    </div>
+  </section>
+
+  <div class="container lookbook-content">
+    <!-- Filtres -->
+    <div class="filters-bar">
+      @for (c of categories; track c.value) {
+        <button class="filter-btn"
+                [class.active]="selectedCategory() === c.value"
+                (click)="setCategory(c.value)">
+          {{ c.label }}
+        </button>
+      }
+    </div>
+
+    <!-- Grid 3 colonnes -->
+    @if (filteredLooks().length === 0) {
+      <div class="no-results">
+        <h3>Aucun look dans cette categorie</h3>
+        <button class="btn btn-primary" (click)="setCategory('')">Voir tous les looks</button>
+      </div>
+    } @else {
+      <div class="looks-grid">
+        @for (look of filteredLooks(); track look.id) {
+          <article class="look-card">
+            <div class="look-image">
+              <img [src]="look.image" [alt]="look.title">
+              <span class="look-category-tag">{{ look.category }}</span>
+              <div class="look-overlay">
+                <a routerLink="/shop" class="btn-shop">Voir les produits →</a>
+              </div>
+            </div>
+            <div class="look-info">
+              <small class="look-location"><i class="an an-map-marker"></i> {{ look.location }}</small>
+              <h3>{{ look.title }}</h3>
+              <p>{{ look.description }}</p>
+              <span class="look-products">{{ look.productIds.length }} produit(s) dans ce look</span>
+            </div>
+          </article>
+        }
+      </div>
+    }
+
+    <div class="lookbook-cta">
+      <h2>Inspirez-vous, achetez votre look</h2>
+      <p>Cliquez sur n'importe quel look pour decouvrir et acheter les produits qui le composent</p>
+      <a routerLink="/shop" class="btn btn-primary">Decouvrir la boutique</a>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

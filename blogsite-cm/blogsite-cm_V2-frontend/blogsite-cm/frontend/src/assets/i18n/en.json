@@ -1,0 +1,58 @@
+{
+  "common": {
+    "search": "Search",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "close": "Close"
+  },
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "lookbook": "Lookbook",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "account": "Account",
+    "wishlist": "Wishlist",
+    "cart": "Cart",
+    "login": "Login",
+    "register": "Sign up",
+    "logout": "Logout"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "registerTitle": "Create account",
+    "identifier": "Email or phone",
+    "email": "Email",
+    "phone": "Phone",
+    "password": "Password",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "noAccount": "No account yet?",
+    "hasAccount": "Already a member?"
+  },
+  "home": {
+    "heroTitle": "blogSite Cameroon",
+    "heroSubtitle": "Discover our collections - 24h delivery in Douala and Yaounde",
+    "heroCta": "Browse collection",
+    "categoriesTitle": "Our categories",
+    "featuredTitle": "This week's picks"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "support": "Support",
+    "legal": "Legal"
+  },
+  "errors": {
+    "required": "Required field",
+    "invalidEmail": "Invalid email format",
+    "invalidPhone": "Invalid Cameroonian number",
+    "passwordTooShort": "At least 8 characters required",
+    "networkError": "Network error",
+    "serverError": "Server error"
+  }
+}

@@ -1,0 +1,70 @@
+<app-header></app-header>
+
+<main class="faq-page">
+  <div class="page-breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb-list">
+        <li><a routerLink="/">Accueil</a></li>
+        <li><span>FAQ</span></li>
+      </ul>
+      <h1 class="page-title">Foire aux questions</h1>
+      <p class="page-subtitle">Toutes les reponses a vos questions sur blogSite Cameroun</p>
+    </div>
+  </div>
+
+  <div class="container faq-content">
+    <div class="search-bar-wrap">
+      <input type="text"
+             class="faq-search"
+             [value]="searchQuery()"
+             (input)="searchQuery.set($any($event.target).value)"
+             placeholder="Rechercher dans la FAQ..." />
+      <i class="an an-search"></i>
+    </div>
+
+    @for (cat of categories; track cat.title; let catIdx = $index) {
+      <div class="faq-category">
+        <div class="cat-header">
+          <i class="an" [class]="cat.icon"></i>
+          <h2>{{ cat.title }}</h2>
+        </div>
+
+        <div class="accordion">
+          @for (item of cat.items; track item.q; let i = $index) {
+            @if (filterItem(item)) {
+              <div class="accordion-item">
+                <button class="accordion-question"
+                        (click)="toggleItem(catIdx + '-' + i)"
+                        [class.open]="openItem() === catIdx + '-' + i">
+                  <span>{{ item.q }}</span>
+                  <i class="caret">▾</i>
+                </button>
+                @if (openItem() === catIdx + '-' + i) {
+                  <div class="accordion-answer">
+                    <p>{{ item.a }}</p>
+                  </div>
+                }
+              </div>
+            }
+          }
+        </div>
+      </div>
+    }
+
+    <div class="faq-cta">
+      <h3>Vous n'avez pas trouve votre reponse ?</h3>
+      <p>Notre equipe est disponible 7j/7 pour vous aider</p>
+      <div class="cta-buttons">
+        <a href="https://wa.me/237670000000" class="btn btn-whatsapp" target="_blank">
+          <i class="an an-whatsapp"></i> WhatsApp
+        </a>
+        <a routerLink="/contact" class="btn btn-outline">Formulaire de contact</a>
+        <a href="tel:+237670000000" class="btn btn-outline">
+          <i class="an an-phone"></i> +237 670 00 00 00
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

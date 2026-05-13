@@ -1,0 +1,60 @@
+.checkout-block {
+  background: #fff; padding: 24px; border-radius: 8px;
+  border: 1px solid #eee; margin-bottom: 24px;
+}
+.checkout-block h3 { color: #1F4E79; margin-top: 0; margin-bottom: 20px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-weight: 500; margin-bottom: 6px; font-size: 14px; }
+.form-control {
+  width: 100%; padding: 10px 12px; border: 1px solid #ddd;
+  border-radius: 4px; font-size: 15px; font-family: inherit;
+}
+.form-control:focus { outline: 2px solid #1F4E79; border-color: #1F4E79; }
+
+.payment-methods { display: flex; flex-direction: column; gap: 12px; }
+.pay-card {
+  display: flex; align-items: center; gap: 12px; padding: 16px;
+  border: 2px solid #eee; border-radius: 8px; cursor: pointer;
+  transition: all .2s;
+}
+.pay-card.active { border-color: #1F4E79; background: #f0f5fa; }
+.pay-card input { margin: 0; }
+.pay-icon {
+  padding: 6px 12px; border-radius: 4px; font-weight: 700;
+  font-size: 13px; min-width: 130px; text-align: center;
+}
+.pay-icon.momo { background: #FFCC00; color: #000; }
+.pay-icon.orange { background: #FF7900; color: #fff; }
+.pay-icon.cod { background: #4CAF50; color: #fff; }
+.pay-desc { color: #666; font-size: 13px; flex: 1; }
+
+.order-summary {
+  background: #f8f8f8; padding: 24px; border-radius: 8px;
+  position: sticky; top: 90px;
+}
+.order-summary h3 { color: #1F4E79; margin-top: 0; }
+.summary-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid #e0e0e0;
+}
+.summary-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+.summary-item .item-info { flex: 1; font-size: 13px; }
+.summary-item small { display: block; color: #888; }
+.summary-row {
+  display: flex; justify-content: space-between;
+  padding: 8px 0; font-size: 15px;
+}
+.summary-row.total {
+  font-size: 18px; font-weight: 700; color: #1F4E79;
+  border-top: 2px solid #1F4E79; margin-top: 12px; padding-top: 16px;
+}
+.btn-primary {
+  width: 100%; padding: 14px; background: #1F4E79;
+  color: #fff; border: 0; border-radius: 4px; font-weight: 600;
+  margin-top: 16px; cursor: pointer; font-size: 16px;
+}
+.btn-primary:disabled { background: #999; cursor: not-allowed; }
+.btn-block { display: block; width: 100%; }
+.terms-note { font-size: 12px; color: #888; margin-top: 12px; }
+.terms-note a { color: #1F4E79; }
+.empty-checkout { padding: 80px 20px; }

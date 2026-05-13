@@ -1,0 +1,181 @@
+<app-header></app-header>
+
+<main class="shop-page">
+  <!-- Breadcrumb -->
+  <div class="page-breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb-list">
+        <li><a routerLink="/">Accueil</a></li>
+        <li><span>Boutique</span></li>
+      </ul>
+      <h1 class="page-title">Boutique</h1>
+    </div>
+  </div>
+
+  <div class="container shop-layout">
+    <!-- Sidebar filtres -->
+    <aside class="shop-sidebar">
+      <div class="filter-block">
+        <h3>Recherche</h3>
+        <input type="text" class="search-input"
+               [value]="searchQuery()"
+               (input)="searchQuery.set($any($event.target).value); currentPage.set(1)"
+               placeholder="Nom du produit..." />
+      </div>
+
+      <div class="filter-block">
+        <h3>Genre</h3>
+        <div class="filter-list">
+          <button class="filter-radio" [class.active]="selectedGender() === 'femme'" (click)="setGender('femme')">Femme</button>
+          <button class="filter-radio" [class.active]="selectedGender() === 'homme'" (click)="setGender('homme')">Homme</button>
+          <button class="filter-radio" [class.active]="selectedGender() === 'enfant'" (click)="setGender('enfant')">Enfant</button>
+          <button class="filter-radio" [class.active]="selectedGender() === 'unisexe'" (click)="setGender('unisexe')">Unisexe</button>
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <h3>Categories</h3>
+        <div class="filter-list">
+          @for (c of categories; track c.value) {
+            <button class="filter-radio"
+                    [class.active]="selectedCategory() === c.value"
+                    (click)="setCategory(c.value)">{{ c.label }}</button>
+          }
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <h3>Prix (FCFA)</h3>
+        <div class="price-inputs">
+          <input type="number" min="0" [value]="priceMin()"
+                 (change)="priceMin.set(+$any($event.target).value); currentPage.set(1)"
+                 placeholder="Min" />
+          <span>—</span>
+          <input type="number" min="0" [value]="priceMax()"
+                 (change)="priceMax.set(+$any($event.target).value); currentPage.set(1)"
+                 placeholder="Max" />
+        </div>
+        <small>{{ priceMin() | fcfa }} - {{ priceMax() | fcfa }}</small>
+      </div>
+
+      <div class="filter-block">
+        <h3>Couleurs</h3>
+        <div class="color-grid">
+          @for (c of allColors; track c.hex) {
+            <button class="color-swatch"
+                    [class.active]="selectedColors().has(c.hex)"
+                    [style.background]="c.hex"
+                    [title]="c.name"
+                    (click)="toggleColor(c.hex)"></button>
+          }
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <h3>Tailles</h3>
+        <div class="size-grid">
+          @for (s of allSizes; track s) {
+            <button class="size-pill"
+                    [class.active]="selectedSizes().has(s)"
+                    (click)="toggleSize(s)">{{ s }}</button>
+          }
+        </div>
+      </div>
+
+      <button class="btn btn-outline btn-block" (click)="resetFilters()">Reinitialiser les filtres</button>
+    </aside>
+
+    <!-- Liste produits -->
+    <section class="shop-content">
+      <!-- Toolbar -->
+      <div class="shop-toolbar">
+        <div class="results-count">
+          <strong>{{ filteredProducts().length }}</strong> produits trouves
+        </div>
+        <div class="sort-control">
+          <label>Trier par :</label>
+          <select [value]="sortBy()" (change)="sortBy.set($any($event.target).value); currentPage.set(1)">
+            <option value="pertinence">Pertinence</option>
+            <option value="prix-asc">Prix : croissant</option>
+            <option value="prix-desc">Prix : decroissant</option>
+            <option value="note">Meilleures notes</option>
+            <option value="nouveau">Nouveautes</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Grid produits -->
+      @if (paginatedProducts().length === 0) {
+        <div class="no-results">
+          <i class="an an-search"></i>
+          <h3>Aucun produit trouve</h3>
+          <p>Essayez de modifier vos filtres ou votre recherche.</p>
+          <button class="btn btn-primary" (click)="resetFilters()">Reinitialiser</button>
+        </div>
+      } @else {
+        <div class="products-grid">
+          @for (p of paginatedProducts(); track p.id) {
+            <article class="product-card">
+              <div class="product-image-wrap" [routerLink]="['/product', p.id]">
+                @if (p.badge === 'sale') { <span class="badge badge-sale">Promo</span> }
+                @if (p.badge === 'new') { <span class="badge badge-new">Nouveau</span> }
+                @if (p.badge === 'hot') { <span class="badge badge-hot">Tendance</span> }
+                @if (!p.inStock) { <span class="badge badge-out">Rupture</span> }
+
+                <img [src]="p.image" [alt]="p.name" class="product-image main">
+                @if (p.hoverImage) {
+                  <img [src]="p.hoverImage" [alt]="p.name" class="product-image hover">
+                }
+
+                <div class="product-actions">
+                  <button class="action-btn"
+                          [class.active]="isInWishlist(p.id)"
+                          (click)="toggleWishlist(p, $event)"
+                          aria-label="Favoris">
+                    <i class="an an-heart"></i>
+                  </button>
+                  <button class="action-btn"
+                          (click)="addToCart(p, $event)"
+                          aria-label="Panier">
+                    <i class="an an-shopping-bag"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="product-info">
+                <h3 class="product-name" [routerLink]="['/product', p.id]">{{ p.name }}</h3>
+                <div class="product-rating">
+                  @for (s of getStarsArray(p.rating); track $index) {
+                    <span class="star" [class.full]="s === 'full'" [class.half]="s === 'half'">★</span>
+                  }
+                  <small>({{ p.reviewCount }})</small>
+                </div>
+                <div class="product-prices">
+                  @if (p.oldPrice) { <span class="price-old">{{ p.oldPrice | fcfa }}</span> }
+                  <span class="price-current">{{ p.price | fcfa }}</span>
+                </div>
+                <div class="product-colors">
+                  @for (c of p.colors; track $index) {
+                    <span class="color-dot" [style.background]="c"></span>
+                  }
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+
+        <!-- Pagination -->
+        <nav class="pagination" aria-label="Pagination">
+          <button class="page-btn" (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1">‹</button>
+          @for (p of pageNumbers(); track p) {
+            <button class="page-btn"
+                    [class.active]="currentPage() === p"
+                    (click)="goToPage(p)">{{ p }}</button>
+          }
+          <button class="page-btn" (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()">›</button>
+        </nav>
+      }
+    </section>
+  </div>
+</main>
+
+<app-footer></app-footer>

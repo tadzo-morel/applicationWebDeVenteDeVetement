@@ -1,0 +1,103 @@
+<app-header></app-header>
+
+<main class="blog-page">
+  <div class="page-breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb-list">
+        <li><a routerLink="/">Accueil</a></li>
+        <li><span>Blog</span></li>
+      </ul>
+      <h1 class="page-title">Blog blogSite Cameroun</h1>
+      <p class="page-subtitle">Conseils mode, tendances et inspirations pour le marche camerounais</p>
+    </div>
+  </div>
+
+  <div class="container blog-layout">
+    <!-- Sidebar -->
+    <aside class="blog-sidebar">
+      <div class="widget">
+        <h3>Recherche</h3>
+        <input type="text" class="search-input"
+               [value]="searchQuery()"
+               (input)="searchQuery.set($any($event.target).value)"
+               placeholder="Rechercher un article..." />
+      </div>
+
+      <div class="widget">
+        <h3>Categories</h3>
+        <ul class="category-list">
+          @for (c of categories; track c.value) {
+            <li>
+              <button class="cat-link"
+                      [class.active]="selectedCategory() === c.value"
+                      (click)="setCategory(c.value)">
+                {{ c.label }}
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="widget">
+        <h3>Articles recents</h3>
+        <ul class="recent-list">
+          @for (p of recentPosts(); track p.id) {
+            <li>
+              <a [routerLink]="['/blog', p.slug]" class="recent-post">
+                <img [src]="p.image" [alt]="p.title">
+                <div>
+                  <strong>{{ p.title }}</strong>
+                  <small>{{ p.date }}</small>
+                </div>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="widget widget-cta">
+        <h3>Newsletter</h3>
+        <p>Recevez nos articles par email chaque semaine.</p>
+        <form (submit)="$event.preventDefault()">
+          <input type="email" placeholder="Votre email" required>
+          <button type="submit">S'abonner</button>
+        </form>
+      </div>
+    </aside>
+
+    <!-- Articles -->
+    <section class="blog-content">
+      @if (filteredPosts().length === 0) {
+        <div class="no-results">
+          <h3>Aucun article trouve</h3>
+          <p>Essayez d'autres mots-cles.</p>
+        </div>
+      } @else {
+        <div class="posts-grid">
+          @for (p of filteredPosts(); track p.id) {
+            <article class="post-card">
+              <a [routerLink]="['/blog', p.slug]" class="post-image">
+                <img [src]="p.image" [alt]="p.title">
+                <span class="post-category">{{ p.category }}</span>
+              </a>
+              <div class="post-body">
+                <div class="post-meta">
+                  <span><i class="an an-user"></i> {{ p.author }}</span>
+                  <span><i class="an an-clock"></i> {{ p.date }}</span>
+                  <span>{{ p.readTime }} min</span>
+                </div>
+                <h2 class="post-title">
+                  <a [routerLink]="['/blog', p.slug]">{{ p.title }}</a>
+                </h2>
+                <p class="post-excerpt">{{ p.excerpt }}</p>
+                <a [routerLink]="['/blog', p.slug]" class="read-more">Lire la suite →</a>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</main>
+
+<app-footer></app-footer>

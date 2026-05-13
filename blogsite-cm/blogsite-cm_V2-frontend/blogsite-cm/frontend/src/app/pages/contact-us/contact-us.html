@@ -1,0 +1,106 @@
+<app-header></app-header>
+
+<div id="page-content">
+  <div class="breadcrumbs section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="breadcrumb-wrapper">
+            <ul class="breadcrumb-list">
+              <li><a routerLink="/">Accueil</a></li>
+              <li><span>Contact</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-section section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 col-md-12 mb-4">
+          <div class="contact-info">
+            <h2>Nous contacter</h2>
+            <p>Une question, une commande, un retour ? Notre equipe est a votre ecoute.</p>
+
+            <div class="contact-item">
+              <strong>Adresse</strong>
+              <p>blogSite Cameroun<br>Akwa, Douala<br>Cameroun</p>
+            </div>
+
+            <div class="contact-item">
+              <strong>Telephone</strong>
+              <p><a href="tel:+237670000000">+237 670 00 00 00</a></p>
+            </div>
+
+            <div class="contact-item">
+              <strong>WhatsApp Business</strong>
+              <p><a href="https://wa.me/237670000000" target="_blank">+237 670 00 00 00</a></p>
+            </div>
+
+            <div class="contact-item">
+              <strong>Email</strong>
+              <p><a href="mailto:contact@blogsite.cm">contact&#64;blogsite.cm</a></p>
+            </div>
+
+            <div class="contact-item">
+              <strong>Horaires</strong>
+              <p>Lundi - Samedi : 08h00 - 18h00<br>Dimanche : 10h00 - 14h00</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7 col-md-12">
+          <div class="contact-form-wrap">
+            <h3>Envoyez-nous un message</h3>
+
+            <form [formGroup]="form" (ngSubmit)="submit()">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Nom complet *</label>
+                    <input type="text" class="form-control" formControlName="name" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" class="form-control" formControlName="email" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Telephone (facultatif)</label>
+                <input type="tel" class="form-control" formControlName="phone"
+                       placeholder="+237670123456" />
+              </div>
+
+              <div class="form-group">
+                <label>Sujet *</label>
+                <input type="text" class="form-control" formControlName="subject" />
+              </div>
+
+              <div class="form-group">
+                <label>Message *</label>
+                <textarea class="form-control" rows="5" formControlName="message"></textarea>
+              </div>
+
+              @if (successMessage()) {
+                <div class="alert alert-success">{{ successMessage() }}</div>
+              }
+
+              <button type="submit" class="btn btn-primary"
+                      [disabled]="form.invalid || loading()">
+                @if (loading()) { Envoi... } @else { Envoyer le message }
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

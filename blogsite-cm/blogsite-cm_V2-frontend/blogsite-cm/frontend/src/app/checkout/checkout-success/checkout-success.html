@@ -1,0 +1,97 @@
+<app-header></app-header>
+
+<main class="success-page">
+  <div class="container">
+    <div class="success-card">
+      <div class="success-icon">
+        <i class="an an-check"></i>
+      </div>
+
+      <h1>Merci pour votre commande !</h1>
+      <p class="success-lead">Votre paiement a ete confirme et votre commande est en cours de preparation.</p>
+
+      <div class="order-info">
+        <div class="info-block">
+          <small>NUMERO DE COMMANDE</small>
+          <strong>{{ orderNumber }}</strong>
+        </div>
+        <div class="info-block">
+          <small>DATE</small>
+          <strong>{{ orderDate }}</strong>
+        </div>
+        <div class="info-block">
+          <small>LIVRAISON ESTIMEE</small>
+          <strong>{{ estimatedDelivery }}</strong>
+        </div>
+      </div>
+
+      <div class="next-steps">
+        <h3>Prochaines etapes</h3>
+        <ol>
+          <li>
+            <i class="an an-envelope"></i>
+            <div>
+              <strong>Confirmation par SMS et email</strong>
+              <small>Vous recevrez les details de votre commande sous quelques minutes</small>
+            </div>
+          </li>
+          <li>
+            <i class="an an-shopping-bag"></i>
+            <div>
+              <strong>Preparation</strong>
+              <small>Notre equipe prepare votre colis avec soin (1-2 jours ouvres)</small>
+            </div>
+          </li>
+          <li>
+            <i class="an an-truck"></i>
+            <div>
+              <strong>Expedition</strong>
+              <small>Vous recevrez un SMS avec le numero de suivi</small>
+            </div>
+          </li>
+          <li>
+            <i class="an an-map-marker"></i>
+            <div>
+              <strong>Livraison</strong>
+              <small>Notre transporteur vous contactera avant la livraison</small>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="success-actions">
+        <a routerLink="/my-account" class="btn btn-primary">Suivre ma commande</a>
+        <a routerLink="/shop" class="btn btn-outline">Continuer mes achats</a>
+      </div>
+
+      <div class="support-info">
+        <h4>Une question ?</h4>
+        <div class="support-buttons">
+          <a href="https://wa.me/237670000000" class="support-btn">
+            <i class="an an-whatsapp"></i>
+            <div>
+              <strong>WhatsApp</strong>
+              <small>Reponse en 5 min</small>
+            </div>
+          </a>
+          <a href="tel:+237670000000" class="support-btn">
+            <i class="an an-phone"></i>
+            <div>
+              <strong>+237 670 00 00 00</strong>
+              <small>Lun-Sam 8h-18h</small>
+            </div>
+          </a>
+          <a href="mailto:contact@blogsite.cm" class="support-btn">
+            <i class="an an-envelope"></i>
+            <div>
+              <strong>contact&#64;blogsite.cm</strong>
+              <small>Reponse sous 24h</small>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

@@ -1,0 +1,279 @@
+<app-header></app-header>
+
+<main class="home-page">
+
+  <!-- ============= HERO BANNER ============= -->
+  <section class="hero">
+    <div class="hero-bg" [style.backgroundImage]="'url(' + heroBanner.image + ')'"></div>
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <span class="hero-small">{{ heroBanner.smallTitle }}</span>
+      <h1 class="hero-title">
+        {{ heroBanner.title }}<br>
+        <span class="hero-accent">{{ heroBanner.titleAccent }}</span>
+      </h1>
+      <a [routerLink]="heroBanner.link" class="btn-hero">{{ heroBanner.cta }}</a>
+    </div>
+  </section>
+
+  <!-- ============= GARANTIES ============= -->
+  <section class="guarantees">
+    <div class="container">
+      <div class="guarantees-grid">
+        @for (g of guarantees; track g.title) {
+          <div class="guarantee-item">
+            <i class="an" [class]="g.icon"></i>
+            <strong>{{ g.title }}</strong>
+            <small>{{ g.subtitle }}</small>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= FRESH ARRIVALS ============= -->
+  <section class="fresh-arrivals">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">NOUVEAUTES — LIVRAISON OFFERTE</h2>
+        <p class="section-subtitle">Des le premier achat, livraison offerte des 50 000 FCFA</p>
+      </div>
+
+      <div class="tabs">
+        @for (t of tabs; track t.id) {
+          <button class="tab-btn"
+                  [class.active]="activeTab() === t.id"
+                  (click)="setTab(t.id)">
+            {{ t.label }}
+          </button>
+        }
+      </div>
+
+      <div class="products-grid">
+        @for (p of filteredProducts(); track p.id) {
+          <div class="product-card">
+            <div class="product-image-wrap" [routerLink]="['/product', p.id]">
+              @if (p.badge === 'sale' || p.discount) {
+                <span class="badge badge-sale">{{ p.discount || 'Promo' }}</span>
+              }
+              @if (p.badge === 'new') {
+                <span class="badge badge-new">Nouveau</span>
+              }
+              @if (p.badge === 'hot') {
+                <span class="badge badge-hot">Tendance</span>
+              }
+              @if (p.badge === 'exclusive') {
+                <span class="badge badge-exclusive">Exclusif</span>
+              }
+
+              <img [src]="p.image" [alt]="p.name" class="product-image main">
+              @if (p.hoverImage) {
+                <img [src]="p.hoverImage" [alt]="p.name" class="product-image hover">
+              }
+
+              <div class="product-actions">
+                <button class="action-btn"
+                        (click)="toggleWishlist(p, $event)"
+                        [class.active]="isInWishlist(p.id)"
+                        title="Ajouter aux favoris"
+                        aria-label="Favoris">
+                  <i class="an an-heart"></i>
+                </button>
+                <button class="action-btn"
+                        (click)="addToCart(p, $event)"
+                        title="Ajouter au panier"
+                        aria-label="Panier">
+                  <i class="an an-shopping-bag"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="product-info">
+              <h3 class="product-name" [routerLink]="['/product', p.id]">{{ p.name }}</h3>
+              <div class="product-prices">
+                @if (p.oldPrice) {
+                  <span class="price-old">{{ p.oldPrice | fcfa }}</span>
+                }
+                <span class="price-current">{{ p.price | fcfa }}</span>
+              </div>
+              <div class="product-rating">
+                @for (s of getStarsArray(p.rating); track $index) {
+                  <span class="star" [class.full]="s === 'full'" [class.half]="s === 'half'">★</span>
+                }
+                <small class="review-count">({{ p.reviewCount }})</small>
+              </div>
+              <div class="product-colors">
+                @for (c of p.colors; track $index) {
+                  <span class="color-dot" [style.background]="c"></span>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="pagination">
+        <button class="page-btn">‹</button>
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">›</button>
+      </div>
+
+      <div class="see-all">
+        <a routerLink="/shop" class="btn-see-all">VOIR TOUS LES PRODUITS</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= GREAT OFFERS (BANDEAU NOIR) ============= -->
+  <section class="great-offers">
+    <div class="container">
+      <div class="offers-header">
+        <div>
+          <span class="offer-tag">OFFRES SPECIALES</span>
+          <h2 class="offers-title">GREAT OFFERS</h2>
+        </div>
+        <div class="countdown">
+          <span class="countdown-label">L'OFFRE SE TERMINE DANS</span>
+          <div class="countdown-timer">
+            <div class="time-block"><strong>{{ days() }}</strong><small>Jours</small></div>
+            <div class="time-block"><strong>{{ hours() }}</strong><small>Heures</small></div>
+            <div class="time-block"><strong>{{ minutes() }}</strong><small>Min</small></div>
+            <div class="time-block"><strong>{{ seconds() }}</strong><small>Sec</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="offers-grid">
+        @for (o of offers; track o.id) {
+          <div class="offer-card">
+            <div class="offer-image-wrap">
+              <span class="offer-badge">{{ o.discount }}</span>
+              <span class="offer-category">{{ o.category }}</span>
+              <img [src]="o.image" [alt]="o.name">
+            </div>
+            <div class="offer-info">
+              <h3>{{ o.name }}</h3>
+              <div class="offer-prices">
+                <span class="price-current">{{ o.price | fcfa }}</span>
+                <span class="price-old">{{ o.oldPrice | fcfa }}</span>
+              </div>
+              <a [routerLink]="['/product', o.id]" class="btn-offer">
+                @switch (o.cta) {
+                  @case ('buy') { ACHETER MAINTENANT → }
+                  @case ('explore') { EXPLORER → }
+                  @case ('discover') { DECOUVRIR → }
+                }
+              </a>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= NOS CATEGORIES ============= -->
+  <section class="categories">
+    <div class="container">
+      <h2 class="section-title">NOS CATEGORIES</h2>
+      <p class="section-subtitle"></p>
+
+      <div class="categories-grid">
+        @for (c of categories; track c.title) {
+          <a [routerLink]="c.link" class="category-card" [class.large]="c.large">
+            <img [src]="c.image" [alt]="c.title">
+            <div class="category-overlay">
+              <span class="category-label">{{ c.label }}</span>
+              <h3 class="category-title">{{ c.title }}</h3>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= NOS MARQUES / PARTENAIRES ============= -->
+  <section class="brands">
+    <div class="container">
+      <h2 class="section-title">NOS PARTENAIRES PAIEMENT</h2>
+      <p class="section-subtitle">Tous les modes de paiement acceptes au Cameroun</p>
+
+      <div class="brands-grid">
+        @for (b of brands; track b.name) {
+          <div class="brand-item">
+            <i class="an" [class]="b.icon"></i>
+            <span>{{ b.name }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= TEMOIGNAGES (BANDEAU SOMBRE) ============= -->
+  <section class="testimonials">
+    <div class="container">
+      <span class="testimonial-tag">CE QU'ILS DISENT</span>
+      <h2 class="testimonials-title">TEMOIGNAGES</h2>
+
+      <div class="testimonial-content">
+        <div class="testimonial-avatar">
+          <img [src]="testimonials[activeTestimonial()].avatar"
+               [alt]="testimonials[activeTestimonial()].name">
+        </div>
+        <div class="testimonial-body">
+          <div class="quote-mark">”</div>
+          <p class="testimonial-text">
+            {{ testimonials[activeTestimonial()].text }}
+          </p>
+          <div class="testimonial-author">
+            <strong>{{ testimonials[activeTestimonial()].name }}</strong>
+            <small>{{ testimonials[activeTestimonial()].city }}</small>
+          </div>
+          <div class="testimonial-rating">
+            @for (s of getStarsArray(testimonials[activeTestimonial()].rating); track $index) {
+              <span class="star" [class.full]="s === 'full'" [class.half]="s === 'half'">★</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-dots">
+        @for (t of testimonials; track t.id; let i = $index) {
+          <button class="dot"
+                  [class.active]="activeTestimonial() === i"
+                  (click)="setTestimonial(i)"
+                  [attr.aria-label]="'Temoignage ' + (i + 1)"></button>
+        }
+      </div>
+
+      <div class="stats">
+        @for (s of stats; track s.label) {
+          <div class="stat">
+            <strong>{{ s.value }}</strong>
+            <small>{{ s.label }}</small>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============= NEWSLETTER ============= -->
+  <section class="newsletter">
+    <div class="container">
+      <div class="newsletter-icon">
+        <i class="an an-envelope"></i>
+      </div>
+      <h2 class="newsletter-title">INSCRIVEZ-VOUS A NOTRE NEWSLETTER</h2>
+      <p class="newsletter-subtitle">Recevez nos meilleures offres et les dernieres tendances chaque semaine</p>
+
+      <form class="newsletter-form" (submit)="$event.preventDefault()">
+        <input type="email" placeholder="Saisissez votre email" required>
+        <button type="submit">S'INSCRIRE</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<app-footer></app-footer>
+<app-whatsapp-fab></app-whatsapp-fab>

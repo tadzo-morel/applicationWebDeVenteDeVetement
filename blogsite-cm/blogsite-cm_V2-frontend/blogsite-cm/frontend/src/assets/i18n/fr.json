@@ -1,0 +1,58 @@
+{
+  "common": {
+    "search": "Rechercher",
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "submit": "Envoyer",
+    "close": "Fermer"
+  },
+  "nav": {
+    "home": "Accueil",
+    "shop": "Boutique",
+    "lookbook": "Lookbook",
+    "blog": "Blog",
+    "about": "A propos",
+    "contact": "Contact",
+    "account": "Mon compte",
+    "wishlist": "Favoris",
+    "cart": "Panier",
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Deconnexion"
+  },
+  "auth": {
+    "loginTitle": "Connexion",
+    "registerTitle": "Creer un compte",
+    "identifier": "Email ou telephone",
+    "email": "Email",
+    "phone": "Telephone",
+    "password": "Mot de passe",
+    "firstName": "Prenom",
+    "lastName": "Nom",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "noAccount": "Pas encore de compte ?",
+    "hasAccount": "Deja inscrit ?"
+  },
+  "home": {
+    "heroTitle": "blogSite Cameroun",
+    "heroSubtitle": "Decouvrez nos collections, livraison Douala et Yaounde en 24h",
+    "heroCta": "Decouvrir la collection",
+    "categoriesTitle": "Nos categories",
+    "featuredTitle": "Selection de la semaine"
+  },
+  "footer": {
+    "rights": "Tous droits reserves",
+    "support": "Support",
+    "legal": "Mentions legales"
+  },
+  "errors": {
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Format email invalide",
+    "invalidPhone": "Numero camerounais invalide",
+    "passwordTooShort": "Au moins 8 caracteres requis",
+    "networkError": "Erreur reseau",
+    "serverError": "Erreur serveur"
+  }
+}

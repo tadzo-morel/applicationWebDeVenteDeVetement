@@ -1,0 +1,117 @@
+<app-header></app-header>
+
+<div id="page-content">
+  <div class="breadcrumbs section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="breadcrumb-wrapper">
+            <ul class="breadcrumb-list">
+              <li><a routerLink="/">Accueil</a></li>
+              <li><span>Panier</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-section section">
+    <div class="container">
+      @if (items().length === 0) {
+        <div class="empty-cart text-center py-5">
+          <i class="an an-shopping-bag" style="font-size: 64px; color: #ccc;"></i>
+          <h3 class="mt-3">Votre panier est vide</h3>
+          <p class="text-muted">Decouvrez nos collections et ajoutez vos articles preferes.</p>
+          <a routerLink="/shop" class="btn btn-primary mt-3">Decouvrir la boutique</a>
+        </div>
+      } @else {
+        <div class="row">
+          <div class="col-lg-8 col-md-12">
+            <div class="cart-table-wrap">
+              <table class="cart-table">
+                <thead>
+                  <tr>
+                    <th>Produit</th>
+                    <th>Prix</th>
+                    <th>Quantite</th>
+                    <th>Sous-total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of items(); track item.id + (item.size ?? '') + (item.color ?? '')) {
+                    <tr>
+                      <td class="product-cell">
+                        <img [src]="item.image" [alt]="item.name" class="cart-thumb" />
+                        <div>
+                          <strong>{{ item.name }}</strong>
+                          @if (item.size) { <small>Taille: {{ item.size }}</small> }
+                          @if (item.color) { <small>Couleur: {{ item.color }}</small> }
+                        </div>
+                      </td>
+                      <td>{{ item.price | fcfa }}</td>
+                      <td class="qty-cell">
+                        <button (click)="updateQuantity(item.id, item.quantity - 1, item.size, item.color)">-</button>
+                        <span>{{ item.quantity }}</span>
+                        <button (click)="updateQuantity(item.id, item.quantity + 1, item.size, item.color)">+</button>
+                      </td>
+                      <td><strong>{{ item.price * item.quantity | fcfa }}</strong></td>
+                      <td>
+                        <button class="btn-remove" (click)="removeItem(item.id, item.size, item.color)"
+                                aria-label="Retirer">×</button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+
+            <div class="cart-actions">
+              <a routerLink="/shop" class="btn btn-outline">Continuer mes achats</a>
+              <button class="btn btn-outline" (click)="clearCart()">Vider le panier</button>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-12">
+            <div class="cart-summary">
+              <h3>Resume de la commande</h3>
+              <div class="summary-row">
+                <span>Sous-total</span>
+                <span>{{ subtotal() | fcfa }}</span>
+              </div>
+              <div class="summary-row">
+                <span>TVA (19,25 %)</span>
+                <span>{{ tva() | fcfa }}</span>
+              </div>
+              <div class="summary-row">
+                <span>Livraison</span>
+                <span>
+                  @if (shipping() === 0) { <em>Offerte</em> }
+                  @else { {{ shipping() | fcfa }} }
+                </span>
+              </div>
+              <div class="summary-row total">
+                <span>Total</span>
+                <span>{{ total() | fcfa }}</span>
+              </div>
+
+              <a routerLink="/checkout" class="btn btn-primary btn-block">Passer a la caisse</a>
+
+              <div class="payment-icons">
+                <small class="text-muted">Paiement accepte :</small>
+                <div class="icons-row">
+                  <span class="pay-badge momo">MTN MoMo</span>
+                  <span class="pay-badge orange">Orange Money</span>
+                  <span class="pay-badge cod">Paiement livraison</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

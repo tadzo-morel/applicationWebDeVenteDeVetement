@@ -1,0 +1,75 @@
+<app-header></app-header>
+
+<main class="auth-page">
+  <div class="auth-wrap">
+    <div class="auth-side">
+      <div class="auth-side-content">
+        <span class="auth-side-tag">BIENVENUE</span>
+        <h2>Connectez-vous a blogSite Cameroun</h2>
+        <p>Acces a votre compte, vos commandes, vos adresses, et vos favoris.</p>
+        <ul class="features">
+          <li><i class="an an-shield"></i> Connexion securisee JWT</li>
+          <li><i class="an an-truck"></i> Suivez vos commandes en temps reel</li>
+          <li><i class="an an-heart"></i> Retrouvez vos favoris</li>
+          <li><i class="an an-clock"></i> Reorder en un clic</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="auth-form-wrap">
+      <div class="auth-form">
+        <h1>Connexion</h1>
+        <p class="muted">Pas encore de compte ? <a routerLink="/register">Inscrivez-vous</a></p>
+
+        @if (errorMsg()) {
+          <div class="alert alert-danger">{{ errorMsg() }}</div>
+        }
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label>Email ou telephone (+237)</label>
+            <input type="text"
+                   class="form-control"
+                   formControlName="identifier"
+                   placeholder="exemple@email.com ou +237670123456"
+                   autocomplete="username">
+          </div>
+
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <div class="password-input">
+              <input [type]="showPassword() ? 'text' : 'password'"
+                     class="form-control"
+                     formControlName="password"
+                     placeholder="Votre mot de passe"
+                     autocomplete="current-password">
+              <button type="button" class="toggle-btn" (click)="togglePassword()" aria-label="Afficher le mot de passe">
+                <i class="an" [class.an-eye]="!showPassword()" [class.an-eye-slash]="showPassword()"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label class="checkbox">
+              <input type="checkbox" formControlName="rememberMe">
+              Se souvenir de moi
+            </label>
+            <a routerLink="/" class="forgot">Mot de passe oublie ?</a>
+          </div>
+
+          <button type="submit"
+                  class="btn btn-primary btn-block"
+                  [disabled]="loginForm.invalid || loading()">
+            @if (loading()) { Connexion... } @else { Se connecter }
+          </button>
+
+          <div class="divider"><span>OU</span></div>
+
+          <a routerLink="/register" class="btn btn-outline btn-block">Creer un compte</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

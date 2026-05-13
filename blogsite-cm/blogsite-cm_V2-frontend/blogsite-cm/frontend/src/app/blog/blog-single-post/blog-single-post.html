@@ -1,0 +1,124 @@
+<app-header></app-header>
+
+<main class="post-page">
+  <!-- Hero -->
+  <section class="post-hero">
+    <img [src]="post.image" [alt]="post.title" class="hero-bg">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <span class="post-category">{{ post.category }}</span>
+      <h1 class="post-title">{{ post.title }}</h1>
+      <div class="post-meta">
+        <span><i class="an an-user"></i> {{ post.author }}</span>
+        <span><i class="an an-clock"></i> {{ post.date }}</span>
+        <span>{{ post.readTime }} min de lecture</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="container post-layout">
+    <article class="post-content">
+      <div class="post-body">
+        <div class="post-text">{{ post.content }}</div>
+
+        <div class="post-tags">
+          <strong>Tags :</strong>
+          @for (t of post.tags; track t) {
+            <a routerLink="/blog" class="tag">#{{ t }}</a>
+          }
+        </div>
+
+        <div class="post-share">
+          <strong>Partager cet article :</strong>
+          <div class="share-icons">
+            <a href="#" aria-label="Facebook"><i class="an an-facebook"></i></a>
+            <a href="#" aria-label="WhatsApp"><i class="an an-whatsapp"></i></a>
+            <a href="#" aria-label="Twitter"><i class="an an-twitter"></i></a>
+            <a href="#" aria-label="Instagram"><i class="an an-instagram"></i></a>
+          </div>
+        </div>
+
+        <!-- Auteur -->
+        <div class="author-card">
+          <div class="author-avatar">{{ post.author[0] }}</div>
+          <div>
+            <strong>{{ post.author }}</strong>
+            <p>{{ post.authorBio }}</p>
+          </div>
+        </div>
+
+        <!-- Commentaires -->
+        <section class="comments-section">
+          <h2>Commentaires ({{ comments.length }})</h2>
+
+          <div class="comments-list">
+            @for (c of comments; track c.id) {
+              <div class="comment">
+                <div class="comment-avatar">
+                  <img [src]="c.avatar" [alt]="c.author">
+                </div>
+                <div class="comment-body">
+                  <div class="comment-header">
+                    <strong>{{ c.author }}</strong>
+                    <small>{{ c.city }} · {{ c.date }}</small>
+                  </div>
+                  <p>{{ c.text }}</p>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Formulaire commentaire -->
+          <form class="comment-form" (submit)="submitComment($event)">
+            <h3>Laisser un commentaire</h3>
+            <div class="form-row">
+              <input type="text"
+                     placeholder="Votre nom"
+                     [value]="commenterName()"
+                     (input)="commenterName.set($any($event.target).value)"
+                     required>
+            </div>
+            <textarea placeholder="Votre commentaire..."
+                      rows="5"
+                      [value]="newComment()"
+                      (input)="newComment.set($any($event.target).value)"
+                      required></textarea>
+            <button type="submit" class="btn btn-primary">Publier le commentaire</button>
+            <small class="form-note">Votre commentaire sera modere avant publication.</small>
+          </form>
+        </section>
+      </div>
+    </article>
+
+    <!-- Sidebar -->
+    <aside class="post-sidebar">
+      <div class="widget">
+        <h3>Articles recents</h3>
+        <ul class="related-list">
+          @for (p of relatedPosts; track p.id) {
+            <li>
+              <a [routerLink]="['/blog', p.slug]">
+                <img [src]="p.image" [alt]="p.title">
+                <div>
+                  <strong>{{ p.title }}</strong>
+                  <small>{{ p.date }}</small>
+                </div>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="widget widget-cta">
+        <h3>Newsletter</h3>
+        <p>Recevez nos meilleurs articles chaque semaine</p>
+        <form (submit)="$event.preventDefault()">
+          <input type="email" placeholder="Votre email" required>
+          <button type="submit">S'abonner</button>
+        </form>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<app-footer></app-footer>
